@@ -2,7 +2,7 @@ const { Client, Message } = require("discord.js");
 
 module.exports = {
     category: "Music",
-    description: "Suffle the current queue",
+    description: "Shuffle the current queue",
     /**
      * @param {Object} options
      * @param {Client} options.client
