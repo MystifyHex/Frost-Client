@@ -481,6 +481,11 @@
   "resolved" "https://registry.npmjs.org/detect-libc/-/detect-libc-1.0.3.tgz"
   "version" "1.0.3"
 
+"discord-paginationembed@^2.1.0":
+  "integrity" "sha512-a89oag1wm42MNiwwMO2U/NCOh3TFd8VkL3duUB18g4dTIqG6leXIKmgze8ZOALfdpXsvFyhC7Ox45CUa1TIsFA=="
+  "resolved" "https://registry.npmjs.org/discord-paginationembed/-/discord-paginationembed-2.1.0.tgz"
+  "version" "2.1.0"
+
 "discord-player@^4.0.7":
   "integrity" "sha512-D/+f4D3PJ2vs1gC3R+2D3uUcwzJnMV4UlP2NkbiIiQflGic+8TKhQY9RgIU0JW2pLIhHQ0nHjgHnxuCyTUKaRA=="
   "resolved" "https://registry.npmjs.org/discord-player/-/discord-player-4.0.7.tgz"
@@ -499,7 +504,7 @@
   dependencies:
     "prism-media" "^1.2.9"
 
-"discord.js@^12.5.0", "discord.js@^12.5.3":
+"discord.js@^12.0.0", "discord.js@^12.5.0", "discord.js@^12.5.3":
   "integrity" "sha512-D3nkOa/pCkNyn6jLZnAiJApw2N9XrIsXUAdThf01i7yrEuqUmDGc7/CexVWwEcgbQR97XQ+mcnqJpmJ/92B4Aw=="
   "resolved" "https://registry.npmjs.org/discord.js/-/discord.js-12.5.3.tgz"
   "version" "12.5.3"

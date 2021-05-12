@@ -3,15 +3,17 @@ const { Client, MessageEmbed, Util } = require("discord.js");
 const OrangedAPI = require("oranged-api");
 const Parser = require("rss-parser");
 const parser = new Parser();
+const cron = require("node-cron");
 const dayjs = require("dayjs");
 const ms = require("ms");
 const client = new Client();
 
 const { Player } = require("discord-player");
-const player = new Player(client)
+const player = new Player(client);
 
 const youtube = require("./src/models/youtube");
 const member = require("./src/models/member-count");
+const birthdayModel = require("./src/models/birthday");
 
 client.player = player;
 
@@ -31,10 +33,6 @@ client.on("ready", async () => {
       {
         name: "Fun",
         emoji: "🎮",
-      },
-      {
-        name: "Admin",
-        emoji: "📮",
       },
       {
         name: "Music",
@@ -78,6 +76,42 @@ client.on("ready", async () => {
           });
       });
     }, 5000);
+  });
+
+  const birthdayData = await birthdayModel.find();
+  birthdayData.forEach((mongooseData) => {
+    const guild = client.guilds.cache.get(mongooseData.guildId);
+    Object.entries(mongooseData.birthdays).forEach(async (element) => {
+      const userId = element[0];
+      const user = await guild.members.fetch(userId);
+
+      const birthday = element[1];
+
+      const birthdayParts = birthday.split("-");
+      const day = birthdayParts[0];
+      const month = birthdayParts[1];
+
+      cron.schedule(`0 0 ${day} ${month} *`, async () => {
+        const mongoData = await birthdayModel.findOne({
+          guildId: guild.id,
+        });
+        if (!mongoData) {
+          const newData = new birthdayModel({ guildId: guild.id });
+          await newData.save();
+          return user.send(
+            `Happy birthday ${user.username} :tada: ! Please let one of the admins know that ${guild.name} doesn't have a birthday channel setup, and all birthday notifications are currently being dmed to the users. Use the command \`set-birthday-channel\` to set the channel.`
+          );
+        } else if (!mongoData.channelId) {
+          return user.send(
+            `Happy birthday ${user.username} :tada: ! Please let one of the admins know that ${guild.name} doesn't have a birthday channel setup, and all birthday notifications are currently being dmed to the users. Use the command \`set-birthday-channel\` to set the channel.`
+          );
+        } else {
+          guild.channels.cache
+            .get(mongoData.channelId)
+            .send(`Happy birthday <@${user.id}> :tada:`);
+        }
+      });
+    });
   });
 
   setInterval(() => {
