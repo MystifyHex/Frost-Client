@@ -3,7 +3,7 @@ const { Client, Message } = require("discord.js");
 module.exports = {
     category: "Music",
     description: "Set the volume of the currently playing song",
-    usage: "volume <volume>",
+    expectedArgs: "volume <volume>",
     /**
      * @param {Object} options
      * @param {Client} options.client

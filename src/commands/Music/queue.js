@@ -4,7 +4,7 @@ const { FieldsEmbed } = require("discord-paginationembed");
 module.exports = {
     category: "Music",
     description: "Get the current queue",
-    usage: "queue",
+    expectedArgs: "queue",
     aliases: ["q"],
     /**
      * @param {Object} options

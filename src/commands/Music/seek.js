@@ -3,7 +3,7 @@ const { Client, Message } = require("discord.js");
 module.exports = {
     category: "Music",
     description: "Jump to a specific spot in the song",
-    usage: "seek <timestamp **in seconds** to skip too>",
+    expectedArgs: "seek <timestamp **in seconds** to skip too>",
     /**
      * @param {Object} options
      * @param {Client} options.client
