@@ -1,16 +1,19 @@
 require("dotenv").config();
-const Discord = require("discord.js");
+const { Client, MessageEmbed, Util } = require("discord.js");
 const OrangedAPI = require("oranged-api");
 const Parser = require("rss-parser");
 const parser = new Parser();
 const dayjs = require("dayjs");
-const cron = require("node-cron");
 const ms = require("ms");
-const client = new Discord.Client();
+const client = new Client();
+
+const { Player } = require("discord-player");
+const player = new Player(client)
 
 const youtube = require("./src/models/youtube");
-const birthdayModel = require("./src/models/birthday");
 const member = require("./src/models/member-count");
+
+client.player = player;
 
 client.on("ready", async () => {
   console.log("Frost Utilities is online!");
@@ -32,6 +35,10 @@ client.on("ready", async () => {
       {
         name: "Admin",
         emoji: "📮",
+      },
+      {
+        name: "Music",
+        emoji: "🎵",
       },
     ]);
 
@@ -73,42 +80,6 @@ client.on("ready", async () => {
     }, 5000);
   });
 
-  const birthdayData = await birthdayModel.find();
-  birthdayData.forEach((mongooseData) => {
-    const guild = client.guilds.cache.get(mongooseData.guildId);
-    Object.entries(mongooseData.birthdays).forEach(async (element) => {
-      const userId = element[0];
-      const user = await guild.members.fetch(userId);
-
-      const birthday = element[1];
-
-      const birthdayParts = birthday.split("-");
-      const day = birthdayParts[0];
-      const month = birthdayParts[1];
-
-      cron.schedule(`0 0 ${day} ${month} *`, async () => {
-        const mongoData = await birthdayModel.findOne({
-          guildId: guild.id,
-        });
-        if (!mongoData) {
-          const newData = new birthdayModel({ guildId: guild.id });
-          await newData.save();
-          return user.send(
-            `Happy birthday ${user.username} :tada: ! Please let one of the admins know that ${guild.name} doesn't have a birthday channel setup, and all birthday notifications are currently being dmed to the users. Use the command \`set-birthday-channel\` to set the channel.`
-          );
-        } else if (!mongoData.channelId) {
-          return user.send(
-            `Happy birthday ${user.username} :tada: ! Please let one of the admins know that ${guild.name} doesn't have a birthday channel setup, and all birthday notifications are currently being dmed to the users. Use the command \`set-birthday-channel\` to set the channel.`
-          );
-        } else {
-          guild.channels.cache
-            .get(mongoData.channelId)
-            .send(`Happy birthday <@${user.id}> :tada:`);
-        }
-      });
-    });
-  });
-
   setInterval(() => {
     member.find().then((data) => {
       if (!data && !data.length) return;
@@ -129,5 +100,78 @@ client.on("ready", async () => {
     });
   }, ms("10 minutes"));
 });
+
+client.player
+  .on("trackStart", (message, track) =>
+    message.channel.send(
+      `Now playing \`${track.title}\` requested by \`${track.requestedBy.tag}\`!`
+    )
+  )
+  .on("trackAdd", (message, _, track) =>
+    message.channel.send(`\`${track.title}\` has been added to the queue!`)
+  )
+  .on("playlistAdd", (message, _, playlist) =>
+    message.channel.send(
+      `\`${playlist.title}\` has been added to the queue (\`${playlist.tracks.length}\` songs), requested by \`${playlist.requestedBy.tag}\``
+    )
+  )
+  .on("searchResults", (message, query, tracks) => {
+    const embed = new MessageEmbed()
+      .setAuthor(`Here are your search results for ${query}!`)
+      .setDescription(
+        tracks
+          .slice(0, 5)
+          .map((t, i) => `${i + 1}. ${Util.escapeMarkdown(t.title)}`)
+      )
+      .setColor("#2F3136")
+      .setFooter("Send the number of the song you want to play!");
+    message.channel.send(embed);
+  })
+  .on("searchInvalidResponse", (message, _, tracks, content, collector) => {
+    if (content === "cancel") {
+      collector.stop();
+      return message.channel.send("Search cancelled!");
+    }
+
+    message.channel.send(
+      `You must send a valid number between 1 and ${tracks.length}!`
+    );
+  })
+  .on("noResults", (message, query) =>
+    message.channel.send(`No results found on YouTube for \`${query}\`!`)
+  )
+
+  .on("queueEnd", (message) =>
+    message.channel.send(
+      "Music stopped as there is no more music in the queue!"
+    )
+  )
+  .on("channelEmpty", (message) =>
+    message.channel.send(
+      "Music stopped as everyone has left the voice channel!"
+    )
+  )
+  .on("botDisconnect", (message) =>
+    message.channel.send(
+      "Music stopped as I have been disconnected from the channel!"
+    )
+  )
+  .on("error", (error, message) => {
+    switch (error) {
+      case "NotPlaying":
+        message.channel.send("There is no music being played on this server!");
+        break;
+      case "NotConnected":
+        message.channel.send("You are not connected to any voice channel!");
+        break;
+      case "UnableToJoin":
+        message.channel.send(
+          "I am not able to join your voice channel, please check my permissions!"
+        );
+        break;
+      default:
+        message.channel.send(`Something went wrong, error: \`${error}\``);
+    }
+  });
 
 client.login(process.env.TOKEN);
