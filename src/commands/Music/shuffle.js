@@ -1,4 +1,4 @@
-const { Client, Message, MessageCollector } = require("discord.js");
+const { Client, Message } = require("discord.js");
 
 module.exports = {
     category: "Music",
@@ -10,7 +10,7 @@ module.exports = {
      * @param {String[]} options.args
      */
     callback: async ({ client, message, args }) => {
-        if (!client.player.getQueue(MessageCollector))
+        if (!client.player.getQueue(message))
             return message.channel.send(
                 "There is no music being played on this server!"
             );
