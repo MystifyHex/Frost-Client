@@ -1,5 +1,5 @@
 const { Client, Message, MessageEmbed } = require("discord.js");
-const canvacord = require("canvacord")
+const canvacord = require("canvacord");
 
 module.exports = {
     category: "Music",
@@ -18,6 +18,6 @@ module.exports = {
             .setStartTimestamp()
             .setEndTimestamp()
             .setImage(track.thumbnail)
-            .setTitle(track.title)
+            .setTitle(track.title);
     }
 };
