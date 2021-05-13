@@ -1,36 +1,26 @@
 const { Client, Message, MessageEmbed } = require("discord.js");
 
 module.exports = {
-  /**
-   * @param {Object} options
-   * @param {Client} options.client
-   * @param {Message} options.message
-   * @param {String[]} options.args
-   */
-  callback: async ({ client, message, args }) => {
-    if (!message.member.voice.channel)
-      return message.channel.send(
-        "You are not connected to any voice channel!"
-      );
+    /**
+     * @param {Object} options
+     * @param {Client} options.client
+     * @param {Message} options.message
+     * @param {String[]} options.args
+     */
+    callback: async ({ client, message, args }) => {
+        if (!message.member.voice.channel)
+            return message.channel.send(
+                "You are not connected to any voice channel!"
+            );
 
-    if (
-      message.guild.me.voice.channel &&
-      message.member.voice.channel.id !== message.guild.me.voice.channel.id
-    )
-      return message.channel.send(
-        "You are currently not in the same voice channel!"
-      );
+        if (
+            message.member.voice.channel.id !==
+            message.guild.me.voice.channel.id
+        )
+            return message.channel.send(
+                "You are currently not in the same voice channel!"
+            );
 
-    if (!client.player.getQueue(message))
-      return message.reply("There is no music being played on this server!");
-
-    const success = client.player.skip(message);
-
-    if (success)
-      return message.channel.send(
-        `The music has currently been skipped to ${client.player.nowPlaying(
-          message
-        )}`
-      );
-  },
+        client.player.skip(message);
+    }
 };
