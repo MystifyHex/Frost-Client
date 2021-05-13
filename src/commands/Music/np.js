@@ -11,6 +11,7 @@ module.exports = {
      */
     callback: async ({ client, message, args }) => {
         const track = client.player.nowPlaying(message);
+        if (!track) return;
 
         const embed = new MessageEmbed()
             .setAuthor("Currently playing")

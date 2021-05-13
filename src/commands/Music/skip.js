@@ -14,8 +14,9 @@ module.exports = {
             );
 
         if (
+            !message.guild.me.voice.channel ||
             message.member.voice.channel.id !==
-            message.guild.me.voice.channel.id
+                message.guild.me.voice.channel.id
         )
             return message.channel.send(
                 "You are currently not in the same voice channel!"
