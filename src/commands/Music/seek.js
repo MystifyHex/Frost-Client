@@ -17,4 +17,8 @@ module.exports = {
         client.player.seek(message, parseInt(args.join(" ")) * 1000);
         return message.channel.send("Successfully moved player positon");
     }
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> ed68a44118fafcccb09e76e2c27d6ce4fcd5e19c

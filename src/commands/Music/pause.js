@@ -3,7 +3,7 @@ const { Client, Message } = require("discord.js");
 module.exports = {
     category: "Music",
     description: "Pause or resume the currently playing song",
-    usage: "pause",
+    expectedArgs: "pause",
     aliases: ["resume"],
     /**
      * @param {Object} options
