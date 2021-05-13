@@ -14,7 +14,7 @@ module.exports = {
         const queue = client.player.getQueue(message);
 
         if (!queue) {
-            return message.error("NO_MUSIC_PLAYING");
+            return message.channel.send("No music currently playing!");
         }
 
         if (!args[0] || isNaN(parseInt(args[0]))) {
