@@ -14,12 +14,12 @@ module.exports = {
    * @param {String[]} options.args
    */
   callback: async ({ client, message, args }) => {
-    if (!args[0]) return message.channel.send("Please specify a player.");
+    if (!args[1]) return message.channel.send("Please specify a player.");
 
-    if (!args[1])
+    if (!args[0])
       return message.channel.send("Please specify a specific type of duel.");
 
-    if (args[1] == "classic") {
+    if (args[0] == "classic") {
       hypixelAPIReborn
         .getPlayer(args[0])
         .then((player) => {
@@ -45,20 +45,20 @@ module.exports = {
         });
     }
 
-    if (args[1] == "uhc") {
+    if (args[0] == "uhc") {
       hypixelAPIReborn
         .getPlayer(args[0])
         .then((player) => {
-          const embed = new MessageEmbed()
-            .setTitle("UHC Duels Stats")
-            .setDescription(`[${player.rank}] ${player.nickname}`)
-            .setColor("RANDOM")
-            .addField("Kills:", commaNumber(player.stats.duels.uhc.v1.kills))
-            .addField("Losses:", commaNumber(player.stats.duels.uhc.v1.losses))
-            .addField("Deaths:", commaNumber(player.stats.duels.uhc.v1.deaths))
-            .addField("Wins:", commaNumber(player.stats.duels.uhc.v1.wins));
+          const embed = new Discord.MessageEmbed()
+          .setTitle('UHC Duels Stats')
+          .setDescription(`[${player.rank}] ${player.nickname}`)
+          .setColor("RANDOM")
+          .addField('Kills:', commaNumber(player.stats.duels.uhc.v1.kills))
+          .addField('Losses:', commaNumber(player.stats.duels.uhc.v1.losses))
+          .addField('Deaths:', commaNumber(player.stats.duels.uhc.v1.deaths))
+          .addField('Wins:', commaNumber(player.stats.duels.uhc.v1.wins))
 
-          message.channel.send(embed);
+      message.channel.send(embed);
         })
         .catch((e) => {
           if (e.message === HypixelAPIReborn.Errors.PLAYER_DOES_NOT_EXIST) {
@@ -71,7 +71,7 @@ module.exports = {
         });
     }
 
-    if (args[1] == "skywars" || args[0] == "sw") {
+    if (args[0] == "skywars" || args[0] == "sw") {
       hypixelAPIReborn
         .getPlayer(args[0])
         .then((player) => {
@@ -106,7 +106,7 @@ module.exports = {
         });
     }
 
-    if (args[1] == "bridge") {
+    if (args[0] == "bridge") {
       hypixelAPIReborn
         .getPlayer(args[0])
         .then((player) => {
@@ -138,7 +138,7 @@ module.exports = {
         });
     }
 
-    if (args[1] == "sumo") {
+    if (args[0] == "sumo") {
       hypixelAPIReborn
         .getPlayer(args[0])
         .then((player) => {
@@ -164,7 +164,7 @@ module.exports = {
         });
     }
 
-    if (args[1] == "op") {
+    if (args[0] == "op") {
       hypixelAPIReborn
         .getPlayer(args[0])
         .then((player) => {
@@ -190,7 +190,7 @@ module.exports = {
         });
     }
 
-    if (args[1] == "combo") {
+    if (args[0] == "combo") {
       hypixelAPIReborn
         .getPlayer(args[0])
         .then((player) => {
