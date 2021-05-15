@@ -206,6 +206,6 @@ client.player
       default:
         message.channel.send(`Something went wrong, error: \`${error}\``);
     }
-  })
+  });
 
 client.login(process.env.TOKEN);
