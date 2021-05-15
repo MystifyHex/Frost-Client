@@ -279,6 +279,13 @@
     "node-pre-gyp" "^0.15.0"
     "simple-get" "^3.0.3"
 
+"captcha-canvas@^2.3.0":
+  "integrity" "sha512-byvyy+jKdWlNrIgc9ukPSo7BIp4GScT5NoTG5Po/d2oxKTCJ5HBqUzRwOHh+9DD6bUsBkvU2oN8abTofIJNMiQ=="
+  "resolved" "https://registry.npmjs.org/captcha-canvas/-/captcha-canvas-2.3.0.tgz"
+  "version" "2.3.0"
+  dependencies:
+    "canvas" "^2.7.0"
+
 "caseless@~0.12.0":
   "integrity" "sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw="
   "resolved" "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz"
