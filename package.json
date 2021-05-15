@@ -35,6 +35,7 @@
     "node-opus": "^0.3.3",
     "opusscript": "^0.0.8",
     "oranged-api": "^2.0.10",
+    "random": "^3.0.6",
     "rss-parser": "^3.12.0",
     "simple-youtube-api": "^5.2.1",
     "soundcloud-downloader": "^1.0.0",
